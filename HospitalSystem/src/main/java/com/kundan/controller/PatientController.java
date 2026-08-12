@@ -26,8 +26,8 @@ public class PatientController {
 	private PatientService patientService;
 	
 	@PostMapping
-	public ResponseEntity<String> addPatient(@RequestBody Patient patient){
-		patientService.addPatient(patient);
+	public ResponseEntity<String> addPatient(@PathVariable int userId, @RequestBody Patient patient){
+		patientService.addPatient(userId, patient);
 		return ResponseEntity.ok("Patient added Successfully !!!");
 	}
 	
@@ -66,17 +66,16 @@ public class PatientController {
 		
 	}
 	
-	@GetMapping("/email")
-	public ResponseEntity<?> searchByEmail(@RequestParam String email){
-		Patient patient = patientService.searchByEmail(email);
-		
-		if(patient !=null) {
-			return ResponseEntity.ok().body(patient);
-		}else {
-			return ResponseEntity.status(404).body("Patient not found");
-		}
-		
-	}
+	/*
+	 * @GetMapping("/email")
+	 *  public ResponseEntity<?> searchByEmail(@RequestParam
+	 * String email){ Patient patient = patientService.searchByEmail(email);
+	 * 
+	 * if(patient !=null) { return ResponseEntity.ok().body(patient); }else { return
+	 * ResponseEntity.status(404).body("Patient not found"); }
+	 * 
+	 * }
+	 */
 	
 	@GetMapping("/{id}/exist")
 	public ResponseEntity<String> existById(@PathVariable int id){

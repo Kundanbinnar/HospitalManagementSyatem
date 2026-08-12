@@ -15,8 +15,24 @@ public class PatientService {
 	@Autowired
 	private PatientRepository patientRepo;
 	
-	public Patient addPatient(Patient patient) {
-		return patientRepo.save(patient);
+	public Patient addPatient(int userId, Patient patient) {
+		
+		Patient patient1 = patientRepo.findByUser_Id(userId);
+		
+		if(patient1 == null) {
+			throw new RuntimeException("Patiend not found for userId");
+		}else {
+			
+			patient1.setName(patient.getName());
+			patient1.setGender(patient.getGender());
+			patient1.setAddress(patient.getAddress());
+			patient1.setPhoneNo(patient.getPhoneNo());
+			patient1.setDob(patient.getDob());
+			patient1.setBloodGroup(patient.getBloodGroup());
+			
+			return patientRepo.save(patient1);
+		}
+		
 	}
 	
 	public List<Patient> getAllPatient(){
@@ -42,7 +58,6 @@ public class PatientService {
 			existingPatient.setGender(patient.getGender());
 			existingPatient.setAddress(patient.getAddress());
 			existingPatient.setPhoneNo(patient.getPhoneNo());
-			existingPatient.setEmail(patient.getEmail());
 			
 			return patientRepo.save(existingPatient);
 		}else {
@@ -50,9 +65,10 @@ public class PatientService {
 		}
 	}
 	
-	public Patient searchByEmail(String email) {
-		return patientRepo.searchByEmail(email);
-	}
+	/*
+	 * public Patient searchByEmail(String email) { return
+	 * patientRepo.searchByEmail(email); }
+	 */
 	
 	public boolean existById(int id) {
 		return patientRepo.existsById(id);

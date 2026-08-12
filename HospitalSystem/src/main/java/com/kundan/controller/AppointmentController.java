@@ -73,4 +73,9 @@ public class AppointmentController {
 	    return  ResponseEntity.ok().body(appointment);
 	}
 	
+	@GetMapping("/myAppointment")
+	public ResponseEntity<List<Appointment>> getAppointmentsByEmail(@RequestParam String email){
+		List<Appointment> appointment = appointmentService.getMyAppointmentByEmail(email);
+		return ResponseEntity.ok().body(appointment);
+	}
 }

@@ -11,4 +11,6 @@ import com.kundan.entity.Doctor;
 public interface DoctorRepository extends JpaRepository<Doctor, Integer>{
 
 	List<Doctor> findBySpecialization(String specialization);
+	
+	Doctor findByUser_Email(String email);
 }

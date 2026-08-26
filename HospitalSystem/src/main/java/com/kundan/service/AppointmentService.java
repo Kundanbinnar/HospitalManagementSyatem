@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kundan.entity.Appointment;
+import com.kundan.entity.Doctor;
 import com.kundan.entity.Patient;
 import com.kundan.repository.AppointmentRepository;
+import com.kundan.repository.DoctorRepository;
 import com.kundan.repository.PatientRepository;
+import com.kundan.dto.AppointmentRequest;
 
 @Service
 public class AppointmentService {
@@ -20,7 +23,26 @@ public class AppointmentService {
 	@Autowired
 	private PatientRepository patientRepository;
 	
-	public Appointment bookAppointment(Appointment appointment) {
+	@Autowired
+	private DoctorRepository doctorRepository;
+	
+	public Appointment bookAppointment(AppointmentRequest request, String email) {
+		
+		  Patient patient = patientRepository.findByEmailId(email);
+
+		  if (patient == null) {
+		        throw new RuntimeException("Patient not found");
+		    }
+		Doctor doctor = doctorRepository.findById(request.getDoctorId()).orElseThrow(() -> new RuntimeException("Doctor not found"));
+		
+		 Appointment appointment = new Appointment();
+		 
+		 appointment.setPatient(patient);
+		 appointment.setDoctor(doctor);
+		 appointment.setAppointmentDate(request.getAppointmentDate());
+		 appointment.setAppointmentTime(request.getAppointmentTime());
+		 appointment.setStatus(request.getStatus());
+		
 		return appointmentRepo.save(appointment);
 	}
 	
@@ -53,8 +75,14 @@ public class AppointmentService {
 		return appointmentRepo.findByPatientId(patientId);
 	}
 	
-	public List<Appointment> getAppointmentByDoctorId(int doctorId){
-		return appointmentRepo.findByDoctorId(doctorId);
+	public List<Appointment> getAppointmentByDoctorId(String email){
+		
+		Doctor doctor = doctorRepository.findByUser_Email(email);
+		
+		if(doctor == null) {
+			 throw new RuntimeException("Doctor not found");
+		}
+		return appointmentRepo.findByDoctorId(doctor.getId());
 	}
 	
 	public List<Appointment> getMyAppointmentByEmail(String email){

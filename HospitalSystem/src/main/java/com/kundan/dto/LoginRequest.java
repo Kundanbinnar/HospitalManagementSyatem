@@ -2,7 +2,7 @@ package com.kundan.dto;
 
 public class LoginRequest {
 
-	private String userName;
+	private String email;
 	private String password;
 	
 	public LoginRequest() {
@@ -10,12 +10,14 @@ public class LoginRequest {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String getUserName() {
-		return userName;
+	public String getEmail() {
+		return email;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
+
 	public String getPassword() {
 		return password;
 	}

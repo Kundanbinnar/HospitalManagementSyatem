@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.StreamingHttpOutputMessage.Body;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,12 +27,14 @@ public class PrescriptionController {
 	@Autowired
 	private PrescriptionService prescriptionService;
 	
+	@PreAuthorize("hasRole('DOCTOR')")
 	@PostMapping
 	public ResponseEntity<String> addPrescription(@RequestBody Prescription prescription){
 		prescriptionService.addPrescription(prescription);
 		return ResponseEntity.ok("Prescription Added successfully !!!");
 	}
 	
+	@PreAuthorize("hasAnyRole('PATIENT', 'DOCTOR')")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getPrescriptionById(@PathVariable int id){
 		Optional<Prescription> prescription =  prescriptionService.getPrescriptionById(id);
@@ -51,6 +54,7 @@ public class PrescriptionController {
 	}
 	
 	
+	@PreAuthorize("hasRole('DOCTOR')")
 	@PutMapping("/{id}/description")
 	public ResponseEntity<String> updateDescription(@PathVariable int id, @RequestBody Map<String, String> body){
 		String description = body.get("description");	

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kundan.dto.LoginRequest;
+import com.kundan.dto.LoginResponse;
 import com.kundan.entity.User;
 import com.kundan.repository.UserRepository;
 import com.kundan.service.UserService;
@@ -20,9 +21,14 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> loginUser(@RequestBody LoginRequest loginRequest){
-		userService.loginUser(loginRequest);
-		return ResponseEntity.ok("User Login in succesffully ");
+	public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
+		
+		LoginResponse response = userService.loginUser(loginRequest);
+		 if (response != null) {
+		        return ResponseEntity.ok(response);
+		    }
+
+		    return ResponseEntity.status(401).body("Invalid email or password");
 	}
 	
 	@PostMapping("/register")

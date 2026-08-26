@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,12 +32,14 @@ public class PatientController {
 		return ResponseEntity.ok("Patient added Successfully !!!");
 	}
 	
+	@PreAuthorize("hasRole('DOCTOR')")
 	@GetMapping
 	public ResponseEntity<List<Patient>> getAllPatient(){
 		List<Patient> patient =  patientService.getAllPatient();
 		return ResponseEntity.ok().body(patient);
 	}
 	
+	@PreAuthorize("hasAnyRole('PATIENT', 'DOCTOR')")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getPatientById(@PathVariable int id){
 		Optional<Patient> patient = patientService.getPatientById(id);

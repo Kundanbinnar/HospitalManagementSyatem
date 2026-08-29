@@ -12,6 +12,9 @@ public class AppointmentRequest {
 	    private LocalTime appointmentTime;
 
 	    private String status;
+	    
+	    private String appointmentReason;
+	    
 
 		public AppointmentRequest() {
 			super();
@@ -57,6 +60,16 @@ public class AppointmentRequest {
 		public void setStatus(String status) {
 			this.status = status;
 		}
+
+		public String getAppointmentReason() {
+			return appointmentReason;
+		}
+
+		public void setAppointmentReason(String appointmentReason) {
+			this.appointmentReason = appointmentReason;
+		}
+
+		
  
 
 }

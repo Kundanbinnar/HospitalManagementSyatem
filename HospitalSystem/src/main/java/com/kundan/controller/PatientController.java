@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kundan.entity.Patient;
+import com.kundan.repository.PatientRepository;
 import com.kundan.service.PatientService;
 
 @RestController
@@ -57,12 +59,13 @@ public class PatientController {
 		return ResponseEntity.ok("Patient deleted Successfully !!!");
 	}
 	
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<String> updatePatientById(@PathVariable int id, @RequestBody Patient patient){
 		Patient patient1 = patientService.updatePatientById(id, patient);
 		
 		if(patient != null) {
-			return ResponseEntity.ok("Patient updated Successfully !!!");
+			return ResponseEntity.ok("Patient registered Successfully !!!");
 		}else {
 			return ResponseEntity.ok("Patient not found !!!");
 		}
@@ -94,6 +97,31 @@ public class PatientController {
 	@GetMapping("/count")
 	public ResponseEntity<Long> patientCount() {
 		return ResponseEntity.ok(patientService.patientCount());
+	}
+	
+	
+	@GetMapping("/myProfile")
+	public ResponseEntity<?> myProfile(Authentication authentication) {
+		String email = authentication.getName();
+		Patient patient = patientService.myProfile(email);
+		
+		if(patient != null) {
+			return ResponseEntity.ok(patient);
+		}
+		return ResponseEntity.status(404).body("Patient not found");	
+	}
+	
+	@PreAuthorize("hasRole('PATIENT')")
+	@PutMapping("/updateMyProfile")
+	public ResponseEntity<String> updateMyProfile(Authentication authentication,@RequestBody Patient patient){
+		String email = authentication.getName();
+		
+		Patient updatingPatient = patientService.updateMyProfile(email, patient);
+		if(updatingPatient != null) {
+			return ResponseEntity.ok("Patient Updated Successfully !!!");
+		}else {
+			return ResponseEntity.ok("Patient Not Found !!!");
+		}
 	}
 
 }

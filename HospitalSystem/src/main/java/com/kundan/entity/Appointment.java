@@ -24,6 +24,7 @@ public class Appointment {
 	private LocalTime appointmentTime;
 	private String status;
 	private LocalDateTime createAt;
+	private String appointmentReason;
 	
 	@ManyToOne
 	@JoinColumn(name = "patient_id")
@@ -97,6 +98,14 @@ public class Appointment {
 
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
+	}
+
+	public String getAppointmentReason() {
+		return appointmentReason;
+	}
+
+	public void setAppointmentReason(String appointmentReason) {
+		this.appointmentReason = appointmentReason;
 	}
 	
 	

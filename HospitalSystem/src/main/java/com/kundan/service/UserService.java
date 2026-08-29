@@ -58,7 +58,7 @@ public class UserService {
 	}
 	
 	
-	public User registerUser(User user) {
+	public int registerUser(User user) {
 		
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
@@ -67,16 +67,18 @@ public class UserService {
 		if(savedUser.getRole().equalsIgnoreCase("PATIENT")) {
 			Patient patient = new Patient();
 			patient.setUser(savedUser);
-			patientRepo.save(patient);
+			Patient savedPatient = patientRepo.save(patient);
+			return savedPatient.getId();
 		}
 		
 		if(savedUser.getRole().equalsIgnoreCase("DOCTOR")) {
 			Doctor doctor = new Doctor();
 			doctor.setUser(savedUser);
-			doctorRepo.save(doctor);
+		    Doctor savedDoctor = doctorRepo.save(doctor);
+		    return savedDoctor.getId();
 		}
 		
-		return savedUser;
+		return 0;
 	}
 		
 	

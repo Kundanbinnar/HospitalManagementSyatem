@@ -33,9 +33,15 @@ public class AppointmentController {
 	public ResponseEntity<String> bookAppointment(@RequestBody AppointmentRequest request, Authentication authentication){
 		
 		String email = authentication.getName();
-		
-		appointmentService.bookAppointment(request, email);
-		return ResponseEntity.ok("Appoitment book successfully !!!");
+				
+	   try {
+		      appointmentService.bookAppointment(request, email);
+		      return ResponseEntity.ok("Appointment booked successfully !!!");
+
+	   } catch (IllegalArgumentException e) {
+		      return ResponseEntity.badRequest().body(e.getMessage());
+	 }
+	   
 	}
 	
 	@PreAuthorize("hasRole('DOCTOR')")

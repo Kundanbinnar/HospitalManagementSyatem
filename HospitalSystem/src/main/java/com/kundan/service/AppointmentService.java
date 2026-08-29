@@ -1,5 +1,6 @@
 package com.kundan.service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,19 @@ public class AppointmentService {
 		  if (patient == null) {
 		        throw new RuntimeException("Patient not found");
 		    }
+		  
 		Doctor doctor = doctorRepository.findById(request.getDoctorId()).orElseThrow(() -> new RuntimeException("Doctor not found"));
+		
+		
+		LocalTime startTime = request.getAppointmentTime();
+		LocalTime endTime = startTime.plusHours(1);
+		
+		boolean alreadyBooked = appointmentRepo.existsAppointmentInTimeRange(request.getDoctorId(),request.getAppointmentDate(), 
+				startTime, endTime);
+		
+		if(alreadyBooked) {
+		 throw new IllegalArgumentException("This slot is already booked !!!");
+		}
 		
 		 Appointment appointment = new Appointment();
 		 
@@ -42,6 +55,7 @@ public class AppointmentService {
 		 appointment.setAppointmentDate(request.getAppointmentDate());
 		 appointment.setAppointmentTime(request.getAppointmentTime());
 		 appointment.setStatus(request.getStatus());
+		 appointment.setAppointmentReason(request.getAppointmentReason());
 		
 		return appointmentRepo.save(appointment);
 	}

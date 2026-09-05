@@ -40,9 +40,10 @@ public class AppointmentService {
 		
 		LocalTime startTime = request.getAppointmentTime();
 		LocalTime endTime = startTime.plusHours(1);
+		LocalTime startTimeMinusOneHour = startTime.minusHours(1);
 		
 		boolean alreadyBooked = appointmentRepo.existsAppointmentInTimeRange(request.getDoctorId(),request.getAppointmentDate(), 
-				startTime, endTime);
+				startTimeMinusOneHour, endTime);
 		
 		if(alreadyBooked) {
 		 throw new IllegalArgumentException("This slot is already booked !!!");

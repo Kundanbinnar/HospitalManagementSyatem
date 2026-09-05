@@ -19,15 +19,20 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 	
 	//public boolean existsByDoctorIdAndAppointmentDateAndAppointmentTime(int doctorId , LocalDate appointmentDate, LocalTime appointmentTime);
 	
-	
 	@Query("""
 		    SELECT COUNT(a) > 0
 		    FROM Appointment a
 		    WHERE a.doctor.id = :doctorId
 		    AND a.appointmentDate = :appointmentDate
-		    AND a.appointmentTime >= :startTime
+		    AND a.status <> 'CANCELED'
 		    AND a.appointmentTime < :endTime
+		    AND a.appointmentTime > :startTimeMinusOneHour
 		""")
-		boolean existsAppointmentInTimeRange(int doctorId, LocalDate appointmentDate, LocalTime startTime,LocalTime endTime);
+		boolean existsAppointmentInTimeRange(
+		    int doctorId,
+		    LocalDate appointmentDate,
+		    LocalTime startTimeMinusOneHour,
+		    LocalTime endTime
+		);
 	
 }

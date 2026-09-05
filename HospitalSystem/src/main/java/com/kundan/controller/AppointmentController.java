@@ -70,7 +70,7 @@ public class AppointmentController {
 		return ResponseEntity.ok("Appointment is deleted !!!");
 	}
 	
-	@PreAuthorize("hasRole('DOCTOR')")
+	@PreAuthorize("hasRole('PATIENT')")
 	@PutMapping("/{id}/status")
 	public ResponseEntity<String> updateAppointmentStatus(@PathVariable int id, @RequestParam String status){
 		appointmentService.updateAppointmentStatus(id, status);

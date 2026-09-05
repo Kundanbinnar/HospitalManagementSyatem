@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,11 +40,16 @@ public class DoctorController {
 		return ResponseEntity.ok().body(doctor);	
 	}
 	
-	
+	@PreAuthorize("hasRole('DOCTOR')")
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Doctor>> getDoctorByID(@PathVariable int id){
+	public ResponseEntity<?> getDoctorByID(@PathVariable int id){
 		Optional<Doctor> doctor = doctorService.getDoctorByID(id);
-		return ResponseEntity.ok().body(doctor);
+		
+		if(doctor.isPresent()) {
+			return ResponseEntity.ok(doctor.get());
+		}else {
+			return ResponseEntity.status(404).body("Doctor not found...");
+		}
 	}
 	
 	@DeleteMapping("/{id}")
@@ -52,11 +58,13 @@ public class DoctorController {
 		return ResponseEntity.ok("Doctor ID deleted Successfully !!!");
 	}
 	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<String> updatedDoctorByID(@PathVariable int id, @RequestBody Doctor doctor){
 		doctorService.updateDoctorByID(id, doctor);
 		return ResponseEntity.ok("Doctor updated Successfully !!!");
 	}
+	
 	
 	@PreAuthorize("hasRole('DOCTOR')")
 	@PutMapping("/{id}/status")
@@ -70,6 +78,36 @@ public class DoctorController {
 	public ResponseEntity<List<Doctor>> getDoctorBySpecialization(@RequestParam String specialization){
 		List<Doctor> doctor =  doctorService.getDoctorBySpecialization(specialization);
 		return ResponseEntity.ok().body(doctor);
+	}
+	
+	
+	@PreAuthorize("hasRole('DOCTOR')")
+	@GetMapping("/myProfile")
+	public ResponseEntity<?> getMyProfile(Authentication authentication){
+		
+		String email = authentication.getName();
+		Doctor doctor = doctorService.getMyProfile(email);
+		
+		if(doctor != null) {
+			return ResponseEntity.ok(doctor);
+		}else {
+			return ResponseEntity.status(404).body("Doctor not found");
+		}
+	}
+	
+	@PreAuthorize("hasRole('DOCTOR')")
+	@PutMapping("/updateMyProfile")
+	public ResponseEntity<String> updateMyProfile(Authentication authentication,@RequestBody Doctor doctor){
+		
+		String email = authentication.getName();
+		
+		Doctor updatingDoctor = doctorService.updateMyProfile(email, doctor);
+		
+		if(updatingDoctor != null) {
+			return ResponseEntity.ok("Doctor Updated Successfully !!!");
+		}else {
+			return ResponseEntity.ok("Doctor Not Found !!!");
+		}
 	}
 
 }

@@ -91,7 +91,7 @@ public class AppointmentService {
 	
 	public List<Appointment> getAppointmentByDoctorId(String email){
 		
-		Doctor doctor = doctorRepository.findByUser_Email(email);
+		Doctor doctor = doctorRepository.findByEmail(email);
 		
 		if(doctor == null) {
 			 throw new RuntimeException("Doctor not found");

@@ -1,5 +1,7 @@
 package com.kundan.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +19,8 @@ public class Doctor {
 
 	private String name;
 	
+	private String email;
+	
 	private String gender;
 	
 	private String specialization;
@@ -33,6 +37,7 @@ public class Doctor {
 	
 	private String about;
 	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -128,6 +133,14 @@ public class Doctor {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 

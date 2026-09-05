@@ -24,6 +24,9 @@ public class PrescriptionService {
 	private PatientRepository patientRepo;
 	
 	public Prescription addPrescription(Prescription prescription) {
+		System.out.println("Patient ID: " + prescription.getPatient().getId());
+	    System.out.println("Doctor ID: " + prescription.getDoctor().getId());
+	    System.out.println("Appointment ID: " + prescription.getAppointment().getId());
 		return prescriptionRepo.save(prescription);
 	}
 	
@@ -51,13 +54,12 @@ public class PrescriptionService {
 	public List<PrescriptionResponse> getAllPrescriptionByEmail(String email){
 		
 		Patient patient = patientRepo.findByEmailId(email);
-		
+
 		if(patient == null ) {
 			 throw new RuntimeException("Patient not found");
 		}
 		
 		List<Prescription> prescriptions= prescriptionRepo.findByPatientId(patient.getId());
-		
 		List<PrescriptionResponse> response  = new ArrayList<>();
 		
 		for(Prescription prescription : prescriptions) {
@@ -67,13 +69,37 @@ public class PrescriptionService {
 					prescription.getId(),
 	                prescription.getCreateAt(),
 	                prescription.getDescription(),
+	                prescription.getNotes(),
+	                prescription.getDiagnosis(),
 	                appointment.getAppointmentDate(),
 	                appointment.getAppointmentTime(),
 	                appointment.getAppointmentReason(),
 	                appointment.getDoctor().getName()
 					)); 
 		}
+		return response;
+	}
+	
+	public List<PrescriptionResponse> getPrescriptionByPatientId(int id) {
+		List<Prescription> prescriptions = prescriptionRepo.findByPatientId(id);
 		
+		List<PrescriptionResponse> response = new ArrayList<>();
+		for(Prescription prescription : prescriptions) {
+			Appointment appointment = prescription.getAppointment();
+			
+			response.add(new PrescriptionResponse(
+					prescription.getId(),
+	                prescription.getCreateAt(),
+	                prescription.getDescription(),
+	                prescription.getNotes(),
+	                prescription.getDiagnosis(),
+	                appointment.getAppointmentDate(),
+	                appointment.getAppointmentTime(),
+	                appointment.getAppointmentReason(),
+	                appointment.getDoctor().getName()
+	                
+					));
+		}
 		return response;
 	}
 }

@@ -30,8 +30,9 @@ public class PrescriptionController {
 	@Autowired
 	private PrescriptionService prescriptionService;
 	
+	
+	@PostMapping("/addPrescription")
 	@PreAuthorize("hasRole('DOCTOR')")
-	@PostMapping
 	public ResponseEntity<String> addPrescription(@RequestBody Prescription prescription){
 		prescriptionService.addPrescription(prescription);
 		return ResponseEntity.ok("Prescription Added successfully !!!");
@@ -74,6 +75,15 @@ public class PrescriptionController {
 	  List<PrescriptionResponse> prescriptions = prescriptionService.getAllPrescriptionByEmail(email);
       
 	  return ResponseEntity.ok().body(prescriptions);
+	}
+	
+	
+	@PreAuthorize("hasRole('DOCTOR')")
+	@GetMapping("patient/{id}")
+	public ResponseEntity<?> getPrescriptionByPatientId(@PathVariable int id){
+			
+		List<PrescriptionResponse> prescriptions = prescriptionService.getPrescriptionByPatientId(id);
+			return ResponseEntity.ok().body(prescriptions);
 	}
 	
 }

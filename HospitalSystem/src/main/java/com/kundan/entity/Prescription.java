@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,15 +23,15 @@ public class Prescription {
 	
 	private String description;
 	private LocalDateTime createAt;
+	private String notes;
+	private String diagnosis;
 	
 	@ManyToOne
 	@JoinColumn(name = "patient_id")
-	@JsonBackReference
 	private Patient patient;
 	
 	@ManyToOne
 	@JoinColumn(name = "doctor_id")
-	@JsonBackReference
 	private Doctor doctor;
 	
 	@ManyToOne
@@ -94,6 +95,23 @@ public class Prescription {
 	public void setAppointment(Appointment appointment) {
 		this.appointment = appointment;
 	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public String getDiagnosis() {
+		return diagnosis;
+	}
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
+	}
+	
 	
 	
 }

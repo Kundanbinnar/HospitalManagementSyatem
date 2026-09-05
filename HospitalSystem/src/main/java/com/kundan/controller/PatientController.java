@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kundan.entity.Patient;
+import com.kundan.entity.Prescription;
 import com.kundan.repository.PatientRepository;
 import com.kundan.service.PatientService;
 
@@ -123,5 +124,6 @@ public class PatientController {
 			return ResponseEntity.ok("Patient Not Found !!!");
 		}
 	}
+	
 
 }

@@ -9,6 +9,8 @@ public class PrescriptionResponse {
 		private int id;
 		private LocalDateTime createAt;
 	    private String description;
+	    private String notes;
+	    private String diagnosis;
 
 	    private LocalDate appointmentDate;
 	    private LocalTime appointmentTime;
@@ -25,6 +27,8 @@ public class PrescriptionResponse {
 		            int id,
 		            LocalDateTime createAt,
 		            String description,
+		            String notes,
+		            String diagnosis,
 		            LocalDate appointmentDate,
 		            LocalTime appointmentTime,
 		            String appointmentReason,
@@ -33,6 +37,8 @@ public class PrescriptionResponse {
 		        this.id = id;
 		        this.createAt = createAt;
 		        this.description = description;
+		        this.notes = notes;
+		        this.diagnosis = diagnosis;
 		        this.appointmentDate = appointmentDate;
 		        this.appointmentTime = appointmentTime;
 		        this.appointmentReason = appointmentReason;
@@ -93,6 +99,22 @@ public class PrescriptionResponse {
 
 		public void setDoctorName(String doctorName) {
 			this.doctorName = doctorName;
+		}
+
+		public String getNotes() {
+			return notes;
+		}
+
+		public void setNotes(String notes) {
+			this.notes = notes;
+		}
+
+		public String getDiagnosis() {
+			return diagnosis;
+		}
+
+		public void setDiagnosis(String diagnosis) {
+			this.diagnosis = diagnosis;
 		}
 	    
 	    

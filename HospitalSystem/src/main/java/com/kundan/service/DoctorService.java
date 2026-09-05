@@ -37,9 +37,15 @@ public class DoctorService {
 		 if(doctor1.isPresent()){
 			 Doctor existingDoctor = doctor1.get();
 			 existingDoctor.setName(doctor.getName());
+			 existingDoctor.setGender(doctor.getGender());
 			 existingDoctor.setExperience(doctor.getExperience());
 			 existingDoctor.setSpecialization(doctor.getSpecialization());
 			 existingDoctor.setStatus(doctor.getStatus());
+			 existingDoctor.setConsultationFee(doctor.getConsultationFee());
+			 existingDoctor.setEmail(doctor.getEmail());
+			 existingDoctor.setQualification(doctor.getQualification());
+			 existingDoctor.setAbout(doctor.getAbout());
+			 
 			 
 			 doctorRepo.save(existingDoctor);
 		 }
@@ -61,6 +67,28 @@ public class DoctorService {
 	public List<Doctor> getDoctorBySpecialization(String Specialization){
 		
 		return doctorRepo.findBySpecialization(Specialization);
+	}
+	
+	public Doctor getMyProfile(String email) {
+		return doctorRepo.findByEmail(email);
+	}
+	
+	
+	public Doctor updateMyProfile(String email, Doctor doctor) {
+		
+		Doctor existingDoctor = doctorRepo.findByEmail(email);
+		if(existingDoctor != null) {
+			existingDoctor.setAbout(doctor.getAbout());
+			existingDoctor.setConsultationFee(doctor.getConsultationFee());
+			existingDoctor.setExperience(doctor.getExperience());
+			existingDoctor.setSpecialization(doctor.getSpecialization());
+			existingDoctor.setGender(doctor.getGender());
+			existingDoctor.setStatus(doctor.getStatus());
+			
+			return doctorRepo.save(existingDoctor);
+		}else {
+			throw new IllegalArgumentException("Doctor with id "+ email + "not found");
+		}
 	}
 
 }
